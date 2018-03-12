@@ -1,0 +1,24 @@
+{
+    "name": "docteurklein/pgast",
+    "description": "postgres SQL AST manipulation library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Klein Florian",
+            "email": "florian.klein@free.fr"
+        }
+    ],
+    "require": {
+        "ext-pgquery": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "DocteurKlein\\PgQuery\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^4.3"
+    }
+}
