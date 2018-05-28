@@ -15,6 +15,7 @@ final class StringStmt implements Node
 
     public function __construct($name, array $children)
     {
+        $this->name = $name;
         $this->str = $children['str'];
     }
 

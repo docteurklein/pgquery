@@ -17,6 +17,7 @@ final class TypeCast implements Node
 
     public function __construct($name, array $children)
     {
+        $this->name = $name;
         $this->arg = AST::node('arg', $children['arg']);
         $this->typeName = AST::node('typeName', $children['typeName']['TypeName']);
     }

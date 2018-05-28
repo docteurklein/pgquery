@@ -15,6 +15,7 @@ final class Integer implements Node
 
     public function __construct($name, array $children)
     {
+        $this->name = $name;
         $this->ival = $children['ival'];
     }
 

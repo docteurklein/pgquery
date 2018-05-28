@@ -12,7 +12,7 @@ final class A_Const implements Node
     const prefix = '';
     const separator = ' ';
 
-    private $val;
+    public $val;
 
     public function __construct($name, array $children)
     {

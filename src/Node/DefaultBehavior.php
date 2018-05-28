@@ -7,7 +7,6 @@ use DocteurKlein\PgQuery\AST;
 use DocteurKlein\PgQuery\Node\Generic;
 
 trait DefaultBehavior
-
 {
     public $name;
     public $children = [];

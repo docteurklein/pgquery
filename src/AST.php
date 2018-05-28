@@ -41,7 +41,7 @@ final class AST
 
     public static function nodes(array $values): array
     {
-        return array_map([self::class, 'node'], array_keys($values), $values);
+        return array_map([self::class, 'node'], array_keys($values), $values); //@todo apparently this looses keys
     }
 
     public function walk(callable $visitor): void
@@ -60,6 +60,7 @@ final class AST
 
     public function __toString(): string
     {
-        return print_r($this->ast, true)."\n".json_encode($this->raw, JSON_PRETTY_PRINT);
+        //return print_r($this->ast, true)."\n".
+        return json_encode($this->raw, JSON_PRETTY_PRINT);
     }
 }

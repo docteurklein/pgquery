@@ -17,11 +17,18 @@ final class FuncCall implements Node
     public function __construct($name, array $children)
     {
         $this->name = $name;
-        $this->children['funcname'] = AST::node('funcname', $children['funcname']);
+        $this->funcname = AST::node('funcname', $children['funcname']);
+        $this->children = AST::nodes($children['args'] ?? []);
     }
 
     public function __toString(): string
     {
-        return sprintf('%s()', (string)$this->children['funcname']);
+        return sprintf('%s(%s)', (string)$this->funcname, implode(', ', array_map(function($child) {
+            var_dump(get_class($child));
+            if ($child->is('A_Const')) {
+                return  "'".$child."'";
+            }
+            return $child;
+        }, $this->children)));
     }
 }
