@@ -31,7 +31,6 @@ final class QueryBuilder
             if ($node->is('whereClause')) {
                 $node->add(new RawSqlNode($where));
             }
-            return $node;
         });
     }
 

@@ -26,6 +26,6 @@ final class RawSqlNode implements Node
 
     public function add(Node $child): void
     {
-        $this->value .= $node;
+        $this->value .= ' '.$node;
     }
 }

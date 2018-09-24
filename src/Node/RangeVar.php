@@ -23,6 +23,6 @@ final class RangeVar implements Node
 
     public function __toString(): string
     {
-        return "{$this->relname} {$this->alias}";
+        return rtrim("{$this->relname} {$this->alias}");
     }
 }

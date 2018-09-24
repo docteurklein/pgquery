@@ -24,7 +24,6 @@ final class FuncCall implements Node
     public function __toString(): string
     {
         return sprintf('%s(%s)', (string)$this->funcname, implode(', ', array_map(function($child) {
-            var_dump(get_class($child));
             if ($child->is('A_Const')) {
                 return  "'".$child."'";
             }

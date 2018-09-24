@@ -3,24 +3,16 @@
 namespace DocteurKlein\PgQuery;
 
 use DocteurKlein\PgQuery\Node\Generic;
+use DocteurKlein\PgQuery\Node;
+use DocteurKlein\PgQuery\AST\Walk;
 
 final class AST
 {
-    private $ast;
-    private $raw;
-    private $walker;
+    private $nodes;
 
     public function __construct(string $sql)
     {
-        $this->raw = json_decode(pg_parse($sql), true);
-
-        $this->ast = array_map([self::class, 'node'], array_keys($this->raw), $this->raw);
-        $this->ast = self::nodes($this->raw);
-
-        $this->walker = function(Node $node, $key, $visitor) {
-            $visitor($node);
-            array_walk($node->children, $this->walker, $visitor);
-        };
+        $this->nodes = self::nodes(json_decode(pg_parse($sql), true));
     }
 
     public static function node($key, $value): Node
@@ -41,17 +33,36 @@ final class AST
 
     public static function nodes(array $values): array
     {
-        return array_map([self::class, 'node'], array_keys($values), $values); //@todo apparently this looses keys
+        return array_map([self::class, 'node'], array_keys($values), $values);
     }
 
     public function walk(callable $visitor): void
     {
-        array_walk($this->ast, $this->walker, $visitor);
+        (new Walk($visitor))($this->nodes);
+    }
+
+    public function find(callable $criteria): array
+    {
+        $found = [];
+        $this->walk(function($node) use($criteria, &$found) {
+            if ($criteria($node)) {
+                $found[] = $node;
+            }
+        });
+
+        return $found;
+    }
+
+    public function findOne(callable $criteria): ?Node
+    {
+        $found = $this->find($criteria);
+
+        return current($found) ?: null;
     }
 
     public function toSql(): string
     {
-        $sql = implode($this->ast)."\n";
+        $sql = implode($this->nodes);
 
         pg_parse($sql);
 
@@ -60,7 +71,9 @@ final class AST
 
     public function __toString(): string
     {
-        //return print_r($this->ast, true)."\n".
-        return json_encode($this->raw, JSON_PRETTY_PRINT);
+        return implode("\n", [
+            print_r($this->nodes, true),
+            json_encode(json_decode(pg_parse($this->toSql()), true), JSON_PRETTY_PRINT),
+        ]);
     }
 }
